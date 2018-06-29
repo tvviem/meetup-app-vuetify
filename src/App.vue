@@ -4,7 +4,6 @@
       <v-list>
         <v-list-tile v-for="item in menuItems" 
           :key="item.title"
-          router
           :to="item.link">
           <v-list-tile-action>
             <v-icon>{{ item.icon }}</v-icon>
@@ -27,20 +26,17 @@
       <v-toolbar-items class="hidden-xs-only" >
         <v-btn flat v-for="item in menuItems" 
           :key="item.title"
-          router
           :to="item.link">
           <v-icon left>{{ item.icon }}</v-icon>
           {{ item.title }}
         </v-btn>
       </v-toolbar-items>
-      
     </v-toolbar>
     <main>
       <router-view></router-view>
     </main>
   </v-app>
 </template>
-
 <script>
 export default {
   data () {
