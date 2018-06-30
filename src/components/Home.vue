@@ -33,19 +33,9 @@
 
 <script>
 export default {
-  data () {
-    return {
-      meetups: [
-        {
-          imageUrl: require('@/assets/images/City_New_York.jpg'), id: 'saskdhkr126jhjasdah', title: 'Meetup in New York'
-        },
-        {
-          imageUrl: require('@/assets/images/ParisOpera.jpg'), id: '37i64hdsmfsajdksfhd', title: 'Meetup in Paris'
-        },
-        {
-          imageUrl: require('@/assets/images/PhoCoHoiAn.jpg'), id: 'teshg6546236w6347', title: 'Meetup in Quang Nam'
-        }
-      ]
+  computed: {
+    meetups () {
+      return this.$store.getters.featuredMeetups
     }
   },
   methods: {
