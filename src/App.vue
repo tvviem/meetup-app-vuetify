@@ -32,9 +32,9 @@
         </v-btn>
       </v-toolbar-items>
     </v-toolbar>
-    <main>
+    <v-content>
       <router-view></router-view>
-    </main>
+    </v-content>
   </v-app>
 </template>
 <script>

@@ -5,7 +5,11 @@ import { store } from './store'
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 
+import DateFilter from './filters/date'
+
 import colors from 'vuetify/es5/util/colors'
+// Format date to show
+Vue.filter('date', DateFilter)
 
 Vue.use(Vuetify, {
   theme: {

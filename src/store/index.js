@@ -9,19 +9,25 @@ export const store = new Vuex.Store({
       imageUrl: require('@/assets/images/City_New_York.jpg'),
       id: 'saskdhkr126jhjasdah',
       title: 'Meetup in New York',
-      date: '2017-07-20'
+      date: new Date(),
+      location: 'New York',
+      description: 'New York is beautify city'
     },
     {
       imageUrl: require('@/assets/images/ParisOpera.jpg'),
       id: '37i64hdsmfsajdksfhd',
       title: 'Meetup in Paris',
-      date: '2018-02-20'
+      date: new Date(),
+      location: 'Paris',
+      description: 'Paris luxury'
     },
     {
       imageUrl: require('@/assets/images/PhoCoHoiAn.jpg'),
       id: 'teshg6546236w6347',
       title: 'Meetup in Quang Nam',
-      date: '2018-05-29'
+      date: new Date(),
+      location: 'Quãng Nam - Đà Nẵng',
+      description: 'Phố cỗ Hội An'
     }
     ],
     user: {
