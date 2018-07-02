@@ -33,8 +33,8 @@
             </v-layout>
             <v-layout row>
               <v-flex>
-                <v-text-field name="description" label="Description" id="description" multi-line required
-                  v-model="description"></v-text-field>
+                <v-textarea name="description" label="Description" id="description" required
+                  v-model="description"></v-textarea>
               </v-flex>
             </v-layout>
             <v-layout row>
@@ -95,7 +95,6 @@
             <v-layout row>
               <v-flex>
                 <v-btn class="primary" :disabled="!formIsValid" type="submit">create meetup</v-btn>
-                <p> {{ submittableDateTime }} </p>
               </v-flex>
             </v-layout>
           </form>
