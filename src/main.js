@@ -4,13 +4,13 @@ import router from './router'
 import { store } from './store'
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
-
 import DateFilter from './filters/date'
-
+import AlertComponent from './components/Shared/Alert'
 import colors from 'vuetify/es5/util/colors'
-import * as firebase from 'firebase'
+import firebase from 'firebase'
 // Format date to show
 Vue.filter('date', DateFilter)
+Vue.component('app-alert', AlertComponent)
 
 Vue.use(Vuetify, {
   theme: {
