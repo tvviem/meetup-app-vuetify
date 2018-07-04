@@ -35,8 +35,13 @@ new Vue({
       authDomain: 'meetupapp-4acd1.firebaseapp.com',
       databaseURL: 'https://meetupapp-4acd1.firebaseio.com',
       projectId: 'meetupapp-4acd1',
-      storageBucket: 'meetupapp-4acd1.appspot.com',
+      storageBucket: 'gs://meetupapp-4acd1.appspot.com',
       messagingSenderId: '48333877459'
+    })
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) { // Kiem tra trang thai
+        this.$store.dispatch('autoSignIn', user)
+      }
     })
     this.$store.dispatch('loadMeetups')
   }

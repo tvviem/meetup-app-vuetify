@@ -22,8 +22,11 @@
             </v-layout>
             <v-layout row>
               <v-flex>
-                <v-text-field name="imageUrl" label="Image URL" id="image-url" required
-                  v-model="imageUrl"></v-text-field>
+                <v-btn raised class="primary" @click="onPickFile">Upload Image</v-btn>
+                <input type="file" style="display: none" 
+                  ref="fileInput" 
+                  accept="image/*"
+                  @change="onFilePicked">
               </v-flex>
             </v-layout>
             <v-layout row>
@@ -115,7 +118,8 @@ export default {
       dateFormatted: null,
       time: null,
       modalDateDialog: false,
-      modalTimeDialog: false
+      modalTimeDialog: false,
+      image: null
     }
   },
   computed: {
@@ -134,10 +138,13 @@ export default {
       if (!this.formIsValid) {
         return
       }
+      if (!this.image) {
+        return
+      }
       const meetupData = {
         title: this.title,
         location: this.location,
-        imageUrl: this.imageUrl,
+        image: this.image,
         description: this.description,
         date: this.submittableDateTime
       }
@@ -153,6 +160,22 @@ export default {
       if (!date) return null
       const [month, day, year] = date.split('/')
       return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
+    },
+    onPickFile () {
+      this.$refs.fileInput.click()
+    },
+    onFilePicked (event) {
+      const files = event.target.files
+      let filename = files[0].name
+      if (filename.lastIndexOf('.') <= 0) {
+        return alert('Vui lòng chọn tập tin hình ảnh')
+      }
+      const fileReader = new FileReader()
+      fileReader.addEventListener('load', () => {
+        this.imageUrl = fileReader.result
+      })
+      fileReader.readAsDataURL(files[0])
+      this.image = files[0]
     }
   },
   watch: {
