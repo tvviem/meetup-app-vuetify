@@ -8,9 +8,14 @@ import DateFilter from './filters/date'
 import AlertComponent from './components/Shared/Alert'
 import colors from 'vuetify/es5/util/colors'
 import firebase from 'firebase'
+import EditMeetupDetailsDialog from './components/Meetup/Edit/EditMeetupDetailsDialog'
+import EditMeetupDateDialog from './components/Meetup/Edit/EditMeetupDateDialog'
+
 // Format date to show
 Vue.filter('date', DateFilter)
 Vue.component('app-alert', AlertComponent)
+Vue.component('app-edit-meetup-details-dialog', EditMeetupDetailsDialog)
+Vue.component('app-edit-meetup-date-dialog', EditMeetupDateDialog)
 
 Vue.use(Vuetify, {
   theme: {
