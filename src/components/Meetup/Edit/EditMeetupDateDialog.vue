@@ -74,7 +74,7 @@
 <script>
 /* eslint-disable */
 export default {
-  props: ["meetup"],
+  props: ['meetup'],
   data() {
     return {
       editDialog: false,
@@ -86,7 +86,7 @@ export default {
   },
   methods: {
     onSaveChanges() {
-      this.$store.dispatch("updateMeetupData", {
+      this.$store.dispatch('updateMeetupData', {
         id: this.meetup.id,
         date: this.submittableDateTimeToUpdated
       });
@@ -105,7 +105,7 @@ export default {
   created() {
     //this.editableDate = new Date(this.meetup.date)
     const originDate = new Date(this.meetup.date)
-    this.editableDate = originDate.getUTCFullYear() + "-" + (originDate.getUTCMonth() + 1) + "-" + originDate.getUTCDate();
+    this.editableDate = originDate.getUTCFullYear() + '-' + (originDate.getUTCMonth() + 1) + '-' + originDate.getUTCDate();
     const originTime = originDate.toTimeString()
     const hours = originTime.match(/^(\d+)/)[1]
     const minutes = originTime.match(/:(\d+)/)[1]
