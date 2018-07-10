@@ -4,7 +4,8 @@ import router from '../../router'
 
 export default {
   state: {
-    user: null
+    user: null,
+    createdMeetups: []
   },
   mutations: {
     registerUserForMeetup (state, payload) {
@@ -22,6 +23,9 @@ export default {
     },
     setUser (state, payload) {
       state.user = payload
+    },
+    setCreatedMeetups (state, payload) {
+      state.createdMeetups = payload
     }
   },
   actions: {
@@ -137,11 +141,47 @@ export default {
         console.log(err)
         commit('setLoading', false)
       })
+    },
+    fetchMeetupsCreatedByUser ({commit, getters}) {
+      commit('setLoading', true)
+      firebase.database().ref('meetups').once('value')
+      .then(
+        data => {
+          const meetups = []
+          const obj = data.val()
+          for (const key in obj) {
+            if (getters.user.id === obj[key].creatorId) {
+              meetups.push({
+                id: key,
+                title: obj[key].title,
+                location: obj[key].location,
+                description: obj[key].description,
+                imageUrl: obj[key].imageUrl,
+                date: obj[key].date,
+                creatorId: obj[key].creatorId
+              })
+            }
+          }
+          commit('setCreatedMeetups', meetups)
+          commit('setLoading', false)
+        }
+      )
+      .catch(
+        err => {
+          console.log(err)
+          commit('setLoading', true)
+        }
+      )
     }
   },
   getters: {
     user (state) {
       return state.user
+    },
+    createdMeetups (state) {
+      return state.createdMeetups.sort((meetupA, meetupB) => {
+        return meetupA.date > meetupB.date
+      })
     }
   }
 }
