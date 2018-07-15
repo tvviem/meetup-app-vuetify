@@ -6,7 +6,7 @@ export default {
     loadedMeetups: [{
       imageUrl: require('@/assets/images/City_New_York.jpg'),
       id: 'saskdhkr126jhjasdah',
-      title: 'Meetup in New York',
+      title: 'TestData',
       date: new Date(),
       location: 'New York',
       description: 'New York is beautify city'
@@ -14,7 +14,7 @@ export default {
     {
       imageUrl: require('@/assets/images/ParisOpera.jpg'),
       id: '37i64hdsmfsajdksfhd',
-      title: 'Meetup in Paris',
+      title: 'TestData',
       date: new Date(),
       location: 'Paris',
       description: 'Paris luxury'
@@ -22,7 +22,7 @@ export default {
     {
       imageUrl: 'https://wiki-travel.com.vn/Uploads/Picture/thanhhuong-160118040117-Halong-Bay.jpg',
       id: 'teshg6546236w6347',
-      title: 'Meetup in Quang Nam',
+      title: 'TestData',
       date: new Date(),
       location: 'Quãng Nam - Đà Nẵng',
       description: 'Phố cỗ Hội An'

@@ -49,7 +49,6 @@ new Vue({
       if (user) { // Kiem tra trang thai
         this.$store.dispatch('autoSignIn', user)
         this.$store.dispatch('fetchUserData')
-        this.$store.dispatch('fetchMeetupsCreatedByUser')
       }
     })
     this.$store.dispatch('loadMeetups')
