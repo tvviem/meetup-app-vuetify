@@ -49,6 +49,13 @@ export default {
       if (payload.date) {
         meetup.date = payload.date
       }
+    },
+    deleteMeetup (state, payload) {
+      let removeIndex = state.loadedMeetups.map(meetup => {
+        return meetup.id
+      }).indexOf(payload)
+      // const reloadMeetups = state.loadedMeetups.filter(meetup => meetup.id === payload)
+      ~removeIndex && state.loadedMeetups.splice(removeIndex, 1)
     }
   },
   actions: {
@@ -143,6 +150,48 @@ export default {
             console.log(error)
             commit('setLoading', false)
           })
+    },
+    deleteMeetup ({commit}, payload) {
+      commit('setLoading', true)
+      firebase.database().ref('users').once('value')
+      .then(data => {
+        const obj = data.val()
+        for (const key in obj) {
+          const objRegistrations = obj[key].registrations
+          for (const key1 in objRegistrations) {
+            if (objRegistrations[key1] === payload) {
+              console.log(key1)
+              firebase.database().ref('users/' + key + '/registrations').child(key1).remove()
+              .then(
+                () => { // Success remove registations of this meetup.id = payload
+                  // Remove Meetup info
+                  firebase.database().ref('meetups').child(payload).remove()
+                  .then(
+                    () => { // Remove MeetupInfo success
+                      firebase.storage().ref('meetups/' + payload + '**').delete()
+                      .then(function () { // Remove Image Storage success
+                        commit('setLoading', false)
+                        // commit('deleteMeetup', payload)
+                      })
+                      .catch(function (errorWhenRemoveImage) {
+                        console.log(errorWhenRemoveImage)
+                        commit('setLoading', false)
+                      })
+                    })
+                    .catch(function (errorWhenRemoveMeetupInfo) {
+                      console.log(errorWhenRemoveMeetupInfo)
+                      commit('setLoading', false)
+                    })
+                })
+                .catch(errorWhenRemoveRegistrations => {
+                  console.log(errorWhenRemoveRegistrations)
+                  commit('setLoading', false)
+                })
+            }
+          }
+        }
+      })
+      commit('setLoading', false)
     }
   },
   getters: {

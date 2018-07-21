@@ -11,6 +11,7 @@ import firebase from 'firebase'
 import EditMeetupDetailsDialog from './components/Meetup/Edit/EditMeetupDetailsDialog'
 import EditMeetupDateDialog from './components/Meetup/Edit/EditMeetupDateDialog'
 import RegisterDialog from './components/Meetup/Registration/RegisterDialog'
+import DeleteDialog from './components/Meetup/DeleteMeetupDialog'
 
 // Format date to show
 Vue.filter('date', DateFilter)
@@ -18,6 +19,7 @@ Vue.component('app-alert', AlertComponent)
 Vue.component('app-edit-meetup-details-dialog', EditMeetupDetailsDialog)
 Vue.component('app-edit-meetup-date-dialog', EditMeetupDateDialog)
 Vue.component('app-meetup-register-dialog', RegisterDialog)
+Vue.component('app-delete-meetup-dialog', DeleteDialog)
 
 Vue.use(Vuetify, {
   theme: {
