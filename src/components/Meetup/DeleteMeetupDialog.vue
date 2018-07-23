@@ -44,8 +44,9 @@ export default {
     },
     methods: {
         onYesSelect () {
-            this.$store.dispatch('deleteMeetup', this.meetup.id)
+            this.$store.dispatch('deleteMeetup', this.meetup)
             this.deleteDialog = false
+            this.$router.push('/')
         }
     }
 }

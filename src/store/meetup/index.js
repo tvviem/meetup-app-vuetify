@@ -1,5 +1,5 @@
 import firebase from 'firebase/app'
-import 'firebase/auth'
+// import 'firebase/auth'
 
 export default {
   state: {
@@ -53,7 +53,7 @@ export default {
     deleteMeetup (state, payload) {
       let removeIndex = state.loadedMeetups.map(meetup => {
         return meetup.id
-      }).indexOf(payload)
+      }).indexOf(payload.id)
       // const reloadMeetups = state.loadedMeetups.filter(meetup => meetup.id === payload)
       ~removeIndex && state.loadedMeetups.splice(removeIndex, 1)
     }
@@ -159,19 +159,20 @@ export default {
         for (const key in obj) {
           const objRegistrations = obj[key].registrations
           for (const key1 in objRegistrations) {
-            if (objRegistrations[key1] === payload) {
-              console.log(key1)
+            if (objRegistrations[key1] === payload.id) {
               firebase.database().ref('users/' + key + '/registrations').child(key1).remove()
               .then(
                 () => { // Success remove registations of this meetup.id = payload
                   // Remove Meetup info
-                  firebase.database().ref('meetups').child(payload).remove()
+                  firebase.database().ref('meetups').child(payload.id).remove()
                   .then(
                     () => { // Remove MeetupInfo success
-                      firebase.storage().ref('meetups/' + payload + '**').delete()
+                      var patt = /\.[0-9a-z]+\?/
+                      var strExtensionExtract = payload.imageUrl.match(patt)[0] // return ".jpg?"
+                      firebase.storage().ref('meetups/' + payload.id + strExtensionExtract.slice(0, -1)).delete()
                       .then(function () { // Remove Image Storage success
                         commit('setLoading', false)
-                        // commit('deleteMeetup', payload)
+                        commit('deleteMeetup', payload)
                       })
                       .catch(function (errorWhenRemoveImage) {
                         console.log(errorWhenRemoveImage)
