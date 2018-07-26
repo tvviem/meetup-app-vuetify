@@ -3,31 +3,7 @@ import firebase from 'firebase/app'
 
 export default {
   state: {
-    loadedMeetups: [{
-      imageUrl: require('@/assets/images/City_New_York.jpg'),
-      id: 'saskdhkr126jhjasdah',
-      title: 'TestData',
-      date: new Date(),
-      location: 'New York',
-      description: 'New York is beautify city'
-    },
-    {
-      imageUrl: require('@/assets/images/ParisOpera.jpg'),
-      id: '37i64hdsmfsajdksfhd',
-      title: 'TestData',
-      date: new Date(),
-      location: 'Paris',
-      description: 'Paris luxury'
-    },
-    {
-      imageUrl: 'https://wiki-travel.com.vn/Uploads/Picture/thanhhuong-160118040117-Halong-Bay.jpg',
-      id: 'teshg6546236w6347',
-      title: 'TestData',
-      date: new Date(),
-      location: 'Quãng Nam - Đà Nẵng',
-      description: 'Phố cỗ Hội An'
-    }
-    ]
+    loadedMeetups: []
   },
   mutations: {
     setLoadedMeetups (state, payload) {
@@ -96,7 +72,7 @@ export default {
         date: payload.date.toISOString(),
         creatorId: getters.user.id
       }
-      let imageUrl
+      // let imageUrlTemp
       let key
       firebase.database().ref('meetups').push(meetup)
       .then(
@@ -110,15 +86,13 @@ export default {
         return firebase.storage().ref('meetups/' + key + ext).put(payload.image)
       })
       .then(fileData => { // Update downloadURL image as attribute of a meetup
-        fileData.ref.getDownloadURL().then(imageUrl => {
-          return firebase.database().ref('meetups').child(key).update({imageUrl: imageUrl})
-        })
-      })
-      .then(() => {
-        commit('createMeetup', {
-          ...meetup,
-          imageUrl: imageUrl,
-          id: key
+        fileData.ref.getDownloadURL().then(function (imageUrl) {
+          firebase.database().ref('meetups').child(key).update({imageUrl: imageUrl})
+          commit('createMeetup', {
+            ...meetup,
+            imageUrl: imageUrl,
+            id: key
+          })
         })
       })
       .catch(
@@ -153,46 +127,43 @@ export default {
     },
     deleteMeetup ({commit}, payload) {
       commit('setLoading', true)
-      firebase.database().ref('users').once('value')
-      .then(data => {
-        const obj = data.val()
-        for (const key in obj) {
-          const objRegistrations = obj[key].registrations
-          for (const key1 in objRegistrations) {
-            if (objRegistrations[key1] === payload.id) {
-              firebase.database().ref('users/' + key + '/registrations').child(key1).remove()
-              .then(
-                () => { // Success remove registations of this meetup.id = payload
-                  // Remove Meetup info
-                  firebase.database().ref('meetups').child(payload.id).remove()
-                  .then(
-                    () => { // Remove MeetupInfo success
-                      var patt = /\.[0-9a-z]+\?/
-                      var strExtensionExtract = payload.imageUrl.match(patt)[0] // return ".jpg?"
-                      firebase.storage().ref('meetups/' + payload.id + strExtensionExtract.slice(0, -1)).delete()
-                      .then(function () { // Remove Image Storage success
-                        commit('setLoading', false)
-                        commit('deleteMeetup', payload)
-                      })
-                      .catch(function (errorWhenRemoveImage) {
-                        console.log(errorWhenRemoveImage)
-                        commit('setLoading', false)
-                      })
-                    })
-                    .catch(function (errorWhenRemoveMeetupInfo) {
-                      console.log(errorWhenRemoveMeetupInfo)
-                      commit('setLoading', false)
-                    })
-                })
-                .catch(errorWhenRemoveRegistrations => {
-                  console.log(errorWhenRemoveRegistrations)
-                  commit('setLoading', false)
-                })
+      // Remove Meetup info
+      firebase.database().ref('meetups').child(payload.id).remove()
+      .then(function () {
+        var patt = /\.[0-9a-z]+\?/
+        var strExtensionExtract = payload.imageUrl.match(patt)[0] // return ".jpg?"
+        firebase.storage().ref('meetups/' + payload.id + strExtensionExtract.slice(0, -1)).delete()
+        .then(function () { // Remove Image Storage success
+          commit('setLoading', false)
+          // Read users registrations
+          firebase.database().ref('users').once('value')
+          .then(data => {
+            const obj = data.val()
+            for (const key in obj) { // Search and remove registration info
+              const objRegistrations = obj[key].registrations
+              for (const key1 in objRegistrations) {
+                if (objRegistrations[key1] === payload.id) {
+                  firebase.database().ref('users/' + key + '/registrations').child(key1).remove()
+                  .catch(errorWhenRemoveRegistrations => {
+                    console.log(errorWhenRemoveRegistrations)
+                    commit('setLoading', false)
+                  })
+                }
+              }
             }
-          }
-        }
+            commit('deleteMeetup', payload)
+            commit('setLoading', false)
+          })
+        })
+        .catch(function (errorWhenRemoveImage) {
+          console.log(errorWhenRemoveImage)
+          commit('setLoading', false)
+        })
       })
-      commit('setLoading', false)
+      .catch(function (errorWhenRemoveMeetupInfo) {
+        console.log(errorWhenRemoveMeetupInfo)
+        commit('setLoading', false)
+      })
     }
   },
   getters: {
